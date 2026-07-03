@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aura | سماعة ذكية عالية الدقة</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#4f46e5', // Indigo 600
+                        'primary-hover': '#4338ca', // Indigo 700
+                    },
+                    fontFamily: {
+                        sans: ['Tajawal', 'system-ui', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- خطوط جوجل: Tajawal للغة العربية -->
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        body { font-family: 'Tajawal', sans-serif; }
+        
+        /* شريط التمرير المخصص */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+        /* فئات الحركة (Animations) */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease-out;
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* انتقال رسومات SVG */
+        #speaker-body, #speaker-glow, #speaker-top {
+            transition: all 0.5s ease-in-out;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900 antialiased overflow-x-hidden">
+
+    <nav class="fixed w-full z-50 transition-all duration-300" id="navbar">
+        <div class="absolute inset-0 bg-white/70 backdrop-blur-md border-b border-slate-200/50 shadow-sm"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+            <div class="flex justify-between items-center h-20">
+                <!-- الشعار -->
+                <div class="flex-shrink-0 flex items-center gap-2 cursor-pointer" onclick="window.scrollTo(0,0)">
+                    <div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center">
+                        <i data-lucide="audio-lines" class="text-white w-5 h-5"></i>
+                    </div>
+                    <span class="font-bold text-xl tracking-tight text-slate-900">Aura</span>
+                </div>
+
+                <!-- قائمة سطح المكتب -->
+                <div class="hidden md:flex items-center space-x-8 space-x-reverse">
+                    <a href="#features" class="text-sm font-medium text-slate-600 hover:text-primary transition-colors">الميزات</a>
+                    <a href="#design" class="text-sm font-medium text-slate-600 hover:text-primary transition-colors">التصميم</a>
+                    <a href="#reviews" class="text-sm font-medium text-slate-600 hover:text-primary transition-colors">المراجعات</a>
+                    <a href="#faq" class="text-sm font-medium text-slate-600 hover:text-primary transition-colors">الأسئلة الشائعة</a>
+                </div>
+
+                <!-- زر اتخاذ الإجراء -->
+                <div class="hidden md:flex items-center">
+                    <button class="bg-primary hover:bg-primary-hover text-white px-6 py-2.5 rounded-full font-medium transition-all transform hover:scale-105 shadow-md hover:shadow-lg">
+                        اطلب الآن
+                    </button>
+                </div>
+
+                <!-- زر قائمة الجوال -->
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-btn" class="text-slate-600 hover:text-slate-900 p-2">
+                        <i data-lucide="menu" class="w-6 h-6"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="mobile-menu" class="hidden md:hidden absolute top-20 right-0 w-full bg-white border-b border-slate-200 shadow-lg origin-top transition-all">
+            <div class="px-4 pt-2 pb-6 space-y-2">
+                <a href="#features" class="mobile-link block px-3 py-3 text-base font-medium text-slate-800 hover:bg-slate-50 hover:text-primary rounded-md">الميزات</a>
+                <a href="#design" class="mobile-link block px-3 py-3 text-base font-medium text-slate-800 hover:bg-slate-50 hover:text-primary rounded-md">التصميم</a>
+                <a href="#reviews" class="mobile-link block px-3 py-3 text-base font-medium text-slate-800 hover:bg-slate-50 hover:text-primary rounded-md">المراجعات</a>
+                <a href="#faq" class="mobile-link block px-3 py-3 text-base font-medium text-slate-800 hover:bg-slate-50 hover:text-primary rounded-md">الأسئلة الشائعة</a>
+                <div class="pt-4">
+                    <button class="w-full bg-primary hover:bg-primary-hover text-white px-6 py-3 rounded-full font-medium transition-colors shadow-md">
+                        اطلب الآن - $199
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <section class="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden">
+        <!-- عناصر الخلفية -->
+        <div class="absolute top-0 left-0 -translate-y-12 -translate-x-1/3">
+            <div class="w-[600px] h-[600px] bg-primary/10 rounded-full blur-3xl opacity-50"></div>
+        </div>
+        <div class="absolute bottom-0 right-0 translate-y-1/3 translate-x-1/3">
+            <div class="w-[400px] h-[400px] bg-purple-400/10 rounded-full blur-3xl opacity-50"></div>
+        </div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="lg:grid lg:grid-cols-12 lg:gap-16 items-center">
+                
+                <!-- نصوص القسم الرئيسي -->
+                <div class="lg:col-span-6 text-center lg:text-right reveal">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-50 border border-indigo-100 text-primary text-sm font-semibold mb-6">
+                        <span class="relative flex h-2 w-2">
+                          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+                          <span class="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+                        </span>
+                        إصدار جديد
+                    </div>
+                    <h1 class="text-5xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-slate-900 mb-6 leading-[1.2]">
+                        صوت <br>
+                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-purple-600">يحيط بك</span> من كل مكان.
+                    </h1>
+                    <p class="text-lg sm:text-xl text-slate-600 mb-10 max-w-2xl mx-auto lg:mx-0 leading-relaxed">
+                        استمتع بجودة صوت الاستوديو في تصميم بسيط ومذهل. تتكيف Aura بذكاء مع صوتيات غرفتك لتقديم المسرح الصوتي المثالي.
+                    </p>
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+                        <button class="bg-slate-900 hover:bg-slate-800 text-white px-8 py-4 rounded-full font-medium text-lg transition-all transform hover:scale-105 shadow-xl hover:shadow-2xl flex justify-center items-center gap-2">
+                            شراء Aura - $199
+                        </button>
+                        <button class="bg-white hover:bg-slate-50 text-slate-900 border border-slate-200 px-8 py-4 rounded-full font-medium text-lg transition-all shadow-sm hover:shadow-md flex justify-center items-center gap-2 group">
+                            شاهد الفيديو
+                            <i data-lucide="play-circle" class="w-5 h-5 text-slate-400 group-hover:text-primary transition-colors"></i>
+                        </button>
+                    </div>
+                    <div class="mt-8 flex items-center justify-center lg:justify-start gap-4 text-sm text-slate-500">
+                        <div class="flex space-x-reverse -space-x-2">
+                            <img class="w-8 h-8 rounded-full border-2 border-white" src="https://i.pravatar.cc/100?img=1" alt="مستخدم">
+                            <img class="w-8 h-8 rounded-full border-2 border-white" src="https://i.pravatar.cc/100?img=2" alt="مستخدم">
+                            <img class="w-8 h-8 rounded-full border-2 border-white" src="https://i.pravatar.cc/100?img=3" alt="مستخدم">
+                            <div class="w-8 h-8 rounded-full border-2 border-white bg-slate-100 flex items-center justify-center text-xs font-bold text-slate-600">+2k</div>
+                        </div>
+                        <p>محبوبة من قبل عشاق الصوت حول العالم</p>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-6 mt-16 lg:mt-0 reveal reveal-delay-200">
+                    <div class="relative w-full max-w-md mx-auto group">
+                        <!-- توهج زخرفي خلف السماعة -->
+                        <div class="absolute inset-0 bg-gradient-to-r from-primary/30 to-purple-500/30 blur-2xl rounded-full transform group-hover:scale-110 transition-transform duration-700 opacity-60"></div>
+                        
+                        <!-- سماعة SVG تفاعلية مميزة -->
+                        <svg viewBox="0 0 400 500" xmlns="http://www.w3.org/2000/svg" class="relative z-10 w-full h-auto drop-shadow-2xl transition-transform duration-700 ease-out transform group-hover:-translate-y-4">
+                            <defs>
+                                <linearGradient id="grad-midnight" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" stop-color="#334155" />
+                                    <stop offset="100%" stop-color="#0f172a" />
+                                </linearGradient>
+                                <linearGradient id="grad-snow" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" stop-color="#f8fafc" />
+                                    <stop offset="100%" stop-color="#cbd5e1" />
+                                </linearGradient>
+                                <linearGradient id="grad-sand" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" stop-color="#fef08a" />
+                                    <stop offset="100%" stop-color="#d97706" />
+                                </linearGradient>
+                                
+                                <filter id="glow-effect" x="-20%" y="-20%" width="140%" height="140%">
+                                    <feGaussianBlur stdDeviation="6" result="blur" />
+                                    <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                                </filter>
+                            </defs>
+                            
+                            <!-- ظل القاعدة -->
+                            <ellipse cx="200" cy="460" rx="90" ry="15" fill="#000000" opacity="0.2" filter="blur(8px)" />
+                            
+                            <!-- الهيكل الرئيسي -->
+                            <rect id="speaker-body" x="100" y="80" width="200" height="360" rx="80" fill="url(#grad-midnight)" />
+                            
+                            <!-- نسيج شبكي صوتي (تمثيل مبسط) -->
+                            <rect x="115" y="90" width="170" height="340" rx="70" fill="#000000" opacity="0.25" />
+                            <rect x="125" y="100" width="150" height="320" rx="60" fill="#000000" opacity="0.15" />
+                            
+                            <!-- قاعدة لوحة التحكم العلوية -->
+                            <ellipse id="speaker-top" cx="200" cy="80" rx="80" ry="25" fill="#1e293b" />
+                            
+                            <!-- حلقة مضيئة تفاعلية -->
+                            <ellipse id="speaker-glow" cx="200" cy="80" rx="65" ry="18" fill="none" stroke="#60a5fa" stroke-width="6" filter="url(#glow-effect)" opacity="0.8" />
+                            
+                            <!-- عناصر تحكم في مستوى الصوت (للزينة) -->
+                            <circle cx="160" cy="80" r="3" fill="#ffffff" opacity="0.6" />
+                            <circle cx="240" cy="80" r="3" fill="#ffffff" opacity="0.6" />
+                            
+                            <!-- شعار العلامة التجارية Aura على الهيكل -->
+                            <circle cx="200" cy="390" r="12" fill="#ffffff" opacity="0.3" />
+                            <circle cx="200" cy="390" r="4" fill="#ffffff" opacity="0.5" />
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="border-y border-slate-200/60 bg-white py-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center reveal">
+            <p class="text-sm font-semibold text-slate-500 uppercase tracking-wider mb-6">ظهرت في</p>
+            <div class="flex flex-wrap justify-center gap-8 md:gap-16 items-center opacity-60 grayscale" dir="ltr">
+                <!-- استخدام النصوص للشعارات لتقليل الاعتماديات -->
+                <div class="text-2xl font-black tracking-tighter">WIRED</div>
+                <div class="text-xl font-bold font-serif italic">The Verge</div>
+                <div class="text-2xl font-bold tracking-widest">TECHCRUNCH</div>
+                <div class="text-xl font-bold uppercase border-2 border-current px-2">Engadget</div>
+            </div>
+        </div>
+    </section>
+
+    <section id="features" class="py-24 bg-slate-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16 reveal">
+                <h2 class="text-primary font-semibold tracking-wide uppercase mb-3">أعجوبة هندسية</h2>
+                <h3 class="text-3xl md:text-4xl font-bold text-slate-900 mb-6">تقنية صوتية لا تساوم.</h3>
+                <p class="text-lg text-slate-600">تم تصميم كل مكون في Aura خصيصًا لتقديم تجربة استماع نقية وخالصة في تصميم مدمج.</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- الميزة 1 -->
+                <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow reveal">
+                    <div class="w-12 h-12 rounded-2xl bg-indigo-50 text-primary flex items-center justify-center mb-6">
+                        <i data-lucide="scan-line" class="w-6 h-6"></i>
+                    </div>
+                    <h4 class="text-xl font-bold text-slate-900 mb-3">تخطيط الغرفة</h4>
+                    <p class="text-slate-600 leading-relaxed">تقوم الميكروفونات المدمجة بتحليل صوتيات غرفتك وتعديل معادل الصوت ديناميكيًا للحصول على أفضل نقطة استماع.</p>
+                </div>
+                <!-- الميزة 2 -->
+                <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow reveal delay-100">
+                    <div class="w-12 h-12 rounded-2xl bg-indigo-50 text-primary flex items-center justify-center mb-6">
+                        <i data-lucide="waves" class="w-6 h-6"></i>
+                    </div>
+                    <h4 class="text-xl font-bold text-slate-900 mb-3">مسرح صوتي 360°</h4>
+                    <p class="text-slate-600 leading-relaxed">ستة مكبرات صوت مخصصة (Tweeters) موضوعة في مصفوفة اتجاهية تعكس الصوت عن جدرانك لانغماس كلي.</p>
+                </div>
+                <!-- الميزة 3 -->
+                <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow reveal delay-200">
+                    <div class="w-12 h-12 rounded-2xl bg-indigo-50 text-primary flex items-center justify-center mb-6">
+                        <i data-lucide="wifi" class="w-6 h-6"></i>
+                    </div>
+                    <h4 class="text-xl font-bold text-slate-900 mb-3">بث بدون فقدان</h4>
+                    <p class="text-slate-600 leading-relaxed">يدعم Wi-Fi 6 لبث صوتي متواصل وغير مضغوط وعالي الدقة يصل إلى 24-bit/192kHz.</p>
+                </div>
+                <!-- الميزة 4 -->
+                <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow reveal delay-300">
+                    <div class="w-12 h-12 rounded-2xl bg-indigo-50 text-primary flex items-center justify-center mb-6">
+                        <i data-lucide="mic" class="w-6 h-6"></i>
+                    </div>
+                    <h4 class="text-xl font-bold text-slate-900 mb-3">مساعد صوتي</h4>
+                    <p class="text-slate-600 leading-relaxed">تحكم في موسيقاك ومنزلك الذكي واحصل على إجابات بدون استخدام اليدين مع ميزة التعرف على الصوت الرائدة في الصناعة.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="design" class="py-24 bg-slate-900 text-white overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="lg:grid lg:grid-cols-2 lg:gap-16 items-center">
+                
+                <div class="mb-12 lg:mb-0 reveal">
+                    <h2 class="text-sm font-bold tracking-widest text-slate-400 uppercase mb-4">التصميم</h2>
+                    <h3 class="text-4xl md:text-5xl font-bold mb-6">يناسب أي مكان.<br>يبرز في كل مكان.</h3>
+                    <p class="text-lg text-slate-300 mb-10 leading-relaxed">
+                        مغلفة بنسيج صوتي سلس، تبدو Aura رائعة بقدر روعة صوتها. اختر اللون الذي يكمل مساحتك بشكل مثالي.
+                    </p>
+                    
+                    <!-- أزرار اختيار اللون -->
+                    <div class="space-y-4">
+                        <h4 class="text-sm font-semibold text-slate-400 uppercase tracking-wider">اختر اللمسة النهائية</h4>
+                        <div class="flex gap-4">
+                            <!-- زر منتصف الليل -->
+                            <button onclick="changeProductTheme('midnight')" class="group flex flex-col items-center gap-2">
+                                <div id="btn-midnight" class="w-12 h-12 rounded-full bg-slate-800 border-2 border-primary shadow-[0_0_15px_rgba(79,70,229,0.5)] transition-all"></div>
+                                <span class="text-xs font-medium text-slate-300 group-hover:text-white transition-colors">الليل</span>
+                            </button>
+                            
+                            <!-- زر الثلج -->
+                            <button onclick="changeProductTheme('snow')" class="group flex flex-col items-center gap-2">
+                                <div id="btn-snow" class="w-12 h-12 rounded-full bg-slate-100 border-2 border-transparent hover:border-slate-400 transition-all"></div>
+                                <span class="text-xs font-medium text-slate-500 group-hover:text-white transition-colors">الثلج</span>
+                            </button>
+                            
+                            <!-- زر الصحراء -->
+                            <button onclick="changeProductTheme('desert')" class="group flex flex-col items-center gap-2">
+                                <div id="btn-desert" class="w-12 h-12 rounded-full bg-amber-200 border-2 border-transparent hover:border-slate-400 transition-all"></div>
+                                <span class="text-xs font-medium text-slate-500 group-hover:text-white transition-colors">الصحراء</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- حاوية العرض التفاعلي SVG -->
+                <div class="relative flex justify-center reveal">
+                    <!-- توهج محيطي بالخلفية -->
+                    <div id="ambient-glow" class="absolute inset-0 bg-blue-500/20 blur-[100px] rounded-full transition-colors duration-700"></div>
+                    
+                    <!-- تكرار SVG للتفاعل -->
+                    <svg viewBox="0 0 400 500" xmlns="http://www.w3.org/2000/svg" class="relative z-10 w-full max-w-sm h-auto drop-shadow-2xl">
+                        <!-- الظلال -->
+                        <ellipse cx="200" cy="460" rx="90" ry="15" fill="#000000" opacity="0.4" filter="blur(8px)" />
+                        
+                        <!-- الهيكل الرئيسي -->
+                        <rect id="interactive-body" x="100" y="80" width="200" height="360" rx="80" fill="url(#grad-midnight)" class="transition-all duration-700 ease-in-out" />
+                        
+                        <!-- نسيج شبكي -->
+                        <rect x="115" y="90" width="170" height="340" rx="70" fill="#000000" opacity="0.25" />
+                        <rect x="125" y="100" width="150" height="320" rx="60" fill="#000000" opacity="0.15" />
+                        
+                        <!-- اللوحة العلوية -->
+                        <ellipse id="interactive-top" cx="200" cy="80" rx="80" ry="25" fill="#1e293b" class="transition-all duration-700 ease-in-out" />
+                        
+                        <!-- حلقة مضيئة -->
+                        <ellipse id="interactive-glow" cx="200" cy="80" rx="65" ry="18" fill="none" stroke="#60a5fa" stroke-width="6" filter="url(#glow-effect)" opacity="0.9" class="transition-all duration-700 ease-in-out" />
+                        
+                        <circle cx="160" cy="80" r="3" fill="#ffffff" opacity="0.6" />
+                        <circle cx="240" cy="80" r="3" fill="#ffffff" opacity="0.6" />
+                        <circle cx="200" cy="390" r="12" fill="#ffffff" opacity="0.3" />
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="reviews" class="py-24 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 reveal">
+                <h2 class="text-3xl md:text-4xl font-bold text-slate-900 mb-4">لا تأخذ كلمتنا فقط.</h2>
+                <div class="flex justify-center items-center gap-1 text-amber-400 mb-4">
+                    <i data-lucide="star" class="w-6 h-6 fill-current"></i>
+                    <i data-lucide="star" class="w-6 h-6 fill-current"></i>
+                    <i data-lucide="star" class="w-6 h-6 fill-current"></i>
+                    <i data-lucide="star" class="w-6 h-6 fill-current"></i>
+                    <i data-lucide="star" class="w-6 h-6 fill-current"></i>
+                </div>
+                <p class="text-lg text-slate-600">تم التقييم 4.9/5 بواسطة أكثر من 10,000 عميل.</p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- المراجعة 1 -->
+                <div class="bg-slate-50 p-8 rounded-3xl border border-slate-100 reveal">
+                    <div class="flex items-center gap-4 mb-6">
+                        <img src="https://i.pravatar.cc/100?img=11" alt="سارة ج." class="w-12 h-12 rounded-full object-cover">
+                        <div>
+                            <h4 class="font-bold text-slate-900">سارة جنكينز</h4>
+                            <p class="text-sm text-slate-500">مهندسة صوت</p>
+                        </div>
+                    </div>
+                    <p class="text-slate-700 leading-relaxed">"المسرح الصوتي الذي تنشئه هذه الوحدة المنفردة لا يصدق. لقد حلت محل إعداد الستيريو بالكامل في غرفة المعيشة الخاصة بي. الوضوح في الترددات المتوسطة نقي للغاية."</p>
+                </div>
+                
+                <!-- المراجعة 2 -->
+                <div class="bg-slate-50 p-8 rounded-3xl border border-slate-100 reveal delay-100">
+                    <div class="flex items-center gap-4 mb-6">
+                        <img src="https://i.pravatar.cc/100?img=12" alt="ديفيد م." class="w-12 h-12 rounded-full object-cover">
+                        <div>
+                            <h4 class="font-bold text-slate-900">ديفيد ميلر</h4>
+                            <p class="text-sm text-slate-500">مشتري معتمد</p>
+                        </div>
+                    </div>
+                    <p class="text-slate-700 leading-relaxed">"استغرق الإعداد دقيقتين بالضبط. ميزة معايرة الغرفة هي سحر حقيقي—لقد غيرت تمامًا كيف يبدو صوت الجهير (Bass) في شقتي ذات التصميم الصعب."</p>
+                </div>
+
+                <!-- المراجعة 3 -->
+                <div class="bg-slate-50 p-8 rounded-3xl border border-slate-100 reveal delay-200">
+                    <div class="flex items-center gap-4 mb-6">
+                        <img src="https://i.pravatar.cc/100?img=5" alt="إيلينا ر." class="w-12 h-12 rounded-full object-cover">
+                        <div>
+                            <h4 class="font-bold text-slate-900">إيلينا رودريغيز</h4>
+                            <p class="text-sm text-slate-500">مشتري معتمد</p>
+                        </div>
+                    </div>
+                    <p class="text-slate-700 leading-relaxed">"بصرف النظر عن الصوت المذهل، إنها ببساطة قطعة جميلة. لقد حصلت على لون 'الثلج' وهو يمتزج بشكل مثالي مع ديكوري البسيط. أوصي بها بشدة."</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="faq" class="py-24 bg-slate-50 border-t border-slate-200/50">
+        <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 reveal">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-slate-900 mb-4">الأسئلة الشائعة</h2>
+                <p class="text-lg text-slate-600">كل ما تحتاج لمعرفته حول Aura.</p>
+            </div>
+
+            <div class="space-y-4">
+                <!-- سؤال 1 -->
+                <div class="bg-white border border-slate-200 rounded-2xl overflow-hidden transition-all duration-300">
+                    <button class="faq-button w-full px-6 py-5 text-right flex justify-between items-center focus:outline-none">
+                        <span class="font-semibold text-slate-900">هل يمكنني إقران سماعتين Aura معًا؟</span>
+                        <i data-lucide="chevron-down" class="w-5 h-5 text-slate-500 transition-transform duration-300"></i>
+                    </button>
+                    <div class="faq-content max-h-0 overflow-hidden transition-all duration-300 ease-in-out bg-slate-50/50">
+                        <div class="px-6 pb-5 text-slate-600">
+                            نعم! يمكنك إقران سماعتين Aura باستخدام التطبيق المرافق لإنشاء زوج ستيريو حقيقي ومنفصل (يمين/يسار) للحصول على مسرح صوتي أوسع.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- سؤال 2 -->
+                <div class="bg-white border border-slate-200 rounded-2xl overflow-hidden transition-all duration-300">
+                    <button class="faq-button w-full px-6 py-5 text-right flex justify-between items-center focus:outline-none">
+                        <span class="font-semibold text-slate-900">هل تعمل مع التلفزيون الخاص بي؟</span>
+                        <i data-lucide="chevron-down" class="w-5 h-5 text-slate-500 transition-transform duration-300"></i>
+                    </button>
+                    <div class="faq-content max-h-0 overflow-hidden transition-all duration-300 ease-in-out bg-slate-50/50">
+                        <div class="px-6 pb-5 text-slate-600">
+                            تتميز Aura بمنفذ eARC HDMI مخفي في القاعدة، مما يتيح لك توصيلها مباشرة بأجهزة التلفزيون الحديثة لتعمل كبديل قوي لمكبر الصوت الشريطي (Soundbar).
+                        </div>
+                    </div>
+                </div>
+
+                <!-- سؤال 3 -->
+                <div class="bg-white border border-slate-200 rounded-2xl overflow-hidden transition-all duration-300">
+                    <button class="faq-button w-full px-6 py-5 text-right flex justify-between items-center focus:outline-none">
+                        <span class="font-semibold text-slate-900">ما هي خدمات البث المدعومة محليًا؟</span>
+                        <i data-lucide="chevron-down" class="w-5 h-5 text-slate-500 transition-transform duration-300"></i>
+                    </button>
+                    <div class="faq-content max-h-0 overflow-hidden transition-all duration-300 ease-in-out bg-slate-50/50">
+                        <div class="px-6 pb-5 text-slate-600">
+                            تدعم Aura محليًا Spotify Connect و Apple AirPlay 2 و Tidal Connect والبث المدمج للحصول على صوت سلس بدون فقدان من أي تطبيق تقريبًا.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-24 bg-primary text-white text-center relative overflow-hidden">
+        <!-- عناصر خلفية مجردة -->
+        <div class="absolute top-0 right-0 w-96 h-96 bg-white opacity-5 rounded-full blur-3xl translate-x-1/2 -translate-y-1/2"></div>
+        <div class="absolute bottom-0 left-0 w-96 h-96 bg-black opacity-10 rounded-full blur-3xl -translate-x-1/2 translate-y-1/2"></div>
+        
+        <div class="max-w-4xl mx-auto px-4 relative z-10 reveal">
+            <h2 class="text-4xl md:text-6xl font-bold mb-6">هل أنت مستعد لترقية صوتك؟</h2>
+            <p class="text-xl text-indigo-100 mb-10 max-w-2xl mx-auto">انضم إلى آلاف المستمعين الذين يختبرون الموسيقى بالطريقة التي أرادها الفنان. شحن مجاني وإرجاع خلال 30 يومًا.</p>
+            <button class="bg-white hover:bg-slate-50 text-primary px-10 py-5 rounded-full font-bold text-lg transition-all transform hover:scale-105 shadow-xl hover:shadow-2xl">
+                اطلب Aura اليوم - $199
+            </button>
+            <p class="mt-6 text-sm text-indigo-200">يشمل ضمانًا لمدة عام واحد.</p>
+        </div>
+    </section>
+
+    <footer class="bg-slate-900 text-slate-400 py-12 border-t border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mb-8">
+                <div>
+                    <div class="flex items-center gap-2 mb-6">
+                        <div class="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center">
+                            <i data-lucide="audio-lines" class="text-white w-4 h-4"></i>
+                        </div>
+                        <span class="font-bold text-xl tracking-tight text-white">Aura</span>
+                    </div>
+                    <p class="text-sm">صوت ذكي عالي الدقة للمنزل الحديث.</p>
+                </div>
+                <div>
+                    <h4 class="text-white font-semibold mb-4">المنتج</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#" class="hover:text-white transition-colors">الميزات</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">المواصفات التقنية</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">مقارنة</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-white font-semibold mb-4">الدعم</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#" class="hover:text-white transition-colors">الأسئلة الشائعة</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">الشحن والاسترجاع</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">الضمان</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">اتصل بنا</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-white font-semibold mb-4">تابعنا</h4>
+                    <div class="flex gap-4">
+                        <a href="#" class="hover:text-white transition-colors"><i data-lucide="twitter" class="w-5 h-5"></i></a>
+                        <a href="#" class="hover:text-white transition-colors"><i data-lucide="instagram" class="w-5 h-5"></i></a>
+                        <a href="#" class="hover:text-white transition-colors"><i data-lucide="facebook" class="w-5 h-5"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-slate-800 pt-8 flex flex-col md:flex-row justify-between items-center text-sm text-slate-500">
+                <p>&copy; 2026 شركة Aura Audio Inc. جميع الحقوق محفوظة.</p>
+                <div class="flex gap-4 mt-4 md:mt-0">
+                    <a href="#" class="hover:text-white transition-colors">سياسة الخصوصية</a>
+                    <a href="#" class="hover:text-white transition-colors">شروط الخدمة</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // تهيئة أيقونات Lucide
+        lucide.createIcons();
+
+        // 1. تبديل قائمة الجوال
+        const btn = document.getElementById('mobile-menu-btn');
+        const menu = document.getElementById('mobile-menu');
+        const mobileLinks = document.querySelectorAll('.mobile-link');
+
+        btn.addEventListener('click', () => {
+            menu.classList.toggle('hidden');
+        });
+
+        // إغلاق قائمة الجوال عند النقر على رابط
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                menu.classList.add('hidden');
+            });
+        });
+
+        // 2. خلفية شريط التنقل عند التمرير
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 20) {
+                navbar.classList.add('shadow-sm');
+                navbar.querySelector('.absolute').classList.replace('bg-white/70', 'bg-white/90');
+            } else {
+                navbar.classList.remove('shadow-sm');
+                navbar.querySelector('.absolute').classList.replace('bg-white/90', 'bg-white/70');
+            }
+        });
+
+        // 3. حركة الظهور عند التمرير باستخدام Intersection Observer
+        const revealElements = document.querySelectorAll('.reveal');
+        
+        const revealOptions = {
+            threshold: 0.15,
+            rootMargin: "0px 0px -50px 0px"
+        };
+
+        const revealOnScroll = new IntersectionObserver(function(entries, observer) {
+            entries.forEach(entry => {
+                if (!entry.isIntersecting) return;
+                entry.target.classList.add('active');
+                observer.unobserve(entry.target);
+            });
+        }, revealOptions);
+
+        revealElements.forEach(el => {
+            revealOnScroll.observe(el);
+        });
+
+        // 4. منطق الأسئلة الشائعة (Accordion)
+        const faqButtons = document.querySelectorAll('.faq-button');
+        
+        faqButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const content = button.nextElementSibling;
+                const icon = button.querySelector('i');
+                const isOpen = content.style.maxHeight;
+
+                // إغلاق جميع الأسئلة الأخرى
+                document.querySelectorAll('.faq-content').forEach(item => {
+                    item.style.maxHeight = null;
+                });
+                document.querySelectorAll('.faq-button i').forEach(item => {
+                    item.style.transform = 'rotate(0deg)';
+                });
+
+                // تبديل السؤال الحالي
+                if (!isOpen) {
+                    content.style.maxHeight = content.scrollHeight + "px";
+                    icon.style.transform = 'rotate(180deg)';
+                }
+            });
+        });
+
+        // 5. مبدل سمة المنتج التفاعلي (الألوان)
+        const themes = {
+            midnight: {
+                bodyFill: 'url(#grad-midnight)',
+                topFill: '#1e293b',
+                glowStroke: '#60a5fa', // توهج أزرق
+                ambientClass: 'bg-blue-500/20'
+            },
+            snow: {
+                bodyFill: 'url(#grad-snow)',
+                topFill: '#e2e8f0',
+                glowStroke: '#a78bfa', // توهج أرجواني
+                ambientClass: 'bg-purple-500/20'
+            },
+            desert: {
+                bodyFill: 'url(#grad-sand)',
+                topFill: '#b45309',
+                glowStroke: '#fbbf24', // توهج عنبري
+                ambientClass: 'bg-amber-500/20'
+            }
+        };
+
+        function changeProductTheme(themeKey) {
+            const theme = themes[themeKey];
+            
+            // تحديث عناصر SVG
+            document.getElementById('interactive-body').setAttribute('fill', theme.bodyFill);
+            document.getElementById('interactive-top').setAttribute('fill', theme.topFill);
+            document.getElementById('interactive-glow').setAttribute('stroke', theme.glowStroke);
+            
+            // تحديث خلفية التوهج المحيط
+            const ambient = document.getElementById('ambient-glow');
+            ambient.className = `absolute inset-0 blur-[100px] rounded-full transition-colors duration-700 ${theme.ambientClass}`;
+
+            // تحديث حالة أزرار واجهة المستخدم
+            document.getElementById('btn-midnight').classList.remove('border-primary', 'shadow-[0_0_15px_rgba(79,70,229,0.5)]');
+            document.getElementById('btn-midnight').classList.add('border-transparent');
+            
+            document.getElementById('btn-snow').classList.remove('border-slate-300', 'shadow-[0_0_15px_rgba(255,255,255,0.5)]');
+            document.getElementById('btn-snow').classList.add('border-transparent');
+            
+            document.getElementById('btn-desert').classList.remove('border-amber-400', 'shadow-[0_0_15px_rgba(251,191,36,0.5)]');
+            document.getElementById('btn-desert').classList.add('border-transparent');
+
+            // تعيين فئة نشطة للزر المحدد
+            if (themeKey === 'midnight') {
+                document.getElementById('btn-midnight').classList.remove('border-transparent');
+                document.getElementById('btn-midnight').classList.add('border-primary', 'shadow-[0_0_15px_rgba(79,70,229,0.5)]');
+            } else if (themeKey === 'snow') {
+                document.getElementById('btn-snow').classList.remove('border-transparent');
+                document.getElementById('btn-snow').classList.add('border-slate-300', 'shadow-[0_0_15px_rgba(255,255,255,0.5)]');
+            } else if (themeKey === 'desert') {
+                document.getElementById('btn-desert').classList.remove('border-transparent');
+                document.getElementById('btn-desert').classList.add('border-amber-400', 'shadow-[0_0_15px_rgba(251,191,36,0.5)]');
+            }
+        }
+        
+        // تشغيل الرسوم المتحركة الأولية لنص القسم الرئيسي عند التحميل
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.querySelectorAll('.reveal').forEach((el, index) => {
+                    if(index < 2) { // إجبار ظهور أول عنصرين على الفور
+                         el.classList.add('active');
+                    }
+                });
+            }, 100);
+        });
+    </script>
+</body>
+</html>
